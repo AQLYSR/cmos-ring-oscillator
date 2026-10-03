@@ -62,3 +62,14 @@ C {vsource.sym} 100 -20 0 0 {name=V2 value=1.8 savecurrent=false}
 C {lab_pin.sym} -130 -10 0 0 {name=p1 sig_type=std_logic lab=IN
 }
 C {lab_pin.sym} -10 -10 0 0 {name=p2 sig_type=std_logic lab=OUT}
+C {code_shown.sym} 140 50 0 0 {name=s1 only_toplevel=false 
+value="
+.lib /foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+.temp 27
+.control
+dc V1 0 1.8 0.01
+plot v(out)
+let vth = 0
+meas dc vth when v(out)=0.9
+.endc
+"}
