@@ -1,0 +1,31 @@
+** sch_path: /foss/designs/cmos-ring-oscillator/ring_oscillator.sch
+**.subckt ring_oscillator
+x1 VDD n5 n1 0 inverter
+x2 VDD n1 n2 0 inverter
+x3 VDD n2 n3 0 inverter
+x4 VDD n3 n4 0 inverter
+x5 VDD n4 n5 0 inverter
+V1 VDD 0 1.8
+**** begin user architecture code
+
+
+.lib /foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  /foss/designs/cmos-ring-oscillator/inverter.sym # of pins=4
+** sym_path: /foss/designs/cmos-ring-oscillator/inverter.sym
+** sch_path: /foss/designs/cmos-ring-oscillator/inverter.sch
+.subckt inverter vdd in out gnd
+*.ipin in
+*.iopin vdd
+*.iopin gnd
+*.opin out
+XM1 out in vdd vdd sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 ad=0.29 as=0.29 pd=2.58 ps=2.58 nrd=0.29 nrs=0.29 sa=0 sb=0 sd=0 mult=1
+XM2 out in gnd gnd sky130_fd_pr__nfet_01v8 L=0.15 W=1 nf=1 ad=0.29 as=0.29 pd=2.58 ps=2.58 nrd=0.29 nrs=0.29 sa=0 sb=0 sd=0 mult=1
+.ends
+
+.GLOBAL VDD
+.end
