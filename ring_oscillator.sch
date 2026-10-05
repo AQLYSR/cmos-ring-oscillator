@@ -51,17 +51,33 @@ C {lab_pin.sym} 1510 0 0 0 {name=p11 sig_type=std_logic lab=n5}
 C {vdd.sym} 690 -140 0 0 {name=l1 lab=VDD}
 C {gnd.sym} 690 140 0 0 {name=l2 lab=0}
 C {vsource.sym} -260 0 0 0 {name=V1 value=1.8 savecurrent=false}
-C {code_shown.sym} 530 380 0 0 {name=s1 only_toplevel=false value="
+C {code_shown.sym} 470 380 0 0 {name=s1 only_toplevel=false value="
 .lib /foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice tt
-.temp 27
 .ic v(n1)=0
 .control
-tran 1p 10n
-plot v(n1) v(n3)
-meas tran t10 trig v(n1) val=0.9 rise=5 targ v(n1) val=0.9 rise=15
-let period = t10/ 10
-let freq = 1 / period
-print period freq
-hardcopy ring.ps v(n1)
-.endc
+shell rm -f freq_vs_vdd.txt freq_vs_temp.txt
+
+* --- Voltage sweep at 27 C ---
+set temp  27
+foreach vsup 1.6 1.7 1.8 1.9 2.0
+	alter V1 dc = $vsup
+	tran 1p 10n
+	meas tran t10 trig v(n1) val='$vsup/2' rise=5 targ v(n1) val='$vsup/2' rise=15
+	let freq = 10 /t10
+	echo '$vsup $&freq' >> freq_vs_vdd.txt
+end
+
+* --- Temperature sweep at 1.8 V ---
+alter V1 dc = 1.8
+foreach tval -10 0 20 40 60 80
+	set temp =tval
+	tran 1p 10n
+	meas tran t10 trig v(n1) val=0.9 rise=5 targ v(n1) val=0.9 rise=15
+	let freq = 10 /t10
+	echo '%tval $&freq' >> freq_vs_temp.txt
+end
+
+echo 'Done'
+shell cat freq_vs_vdd.txt freq_vs_temp.txt
+e.dnc
 "}
