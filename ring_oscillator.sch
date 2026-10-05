@@ -70,14 +70,14 @@ end
 * --- Temperature sweep at 1.8 V ---
 alter V1 dc = 1.8
 foreach tval -10 0 20 40 60 80
-	set temp =tval
+	set temp = $tval
 	tran 1p 10n
 	meas tran t10 trig v(n1) val=0.9 rise=5 targ v(n1) val=0.9 rise=15
 	let freq = 10 /t10
-	echo '%tval $&freq' >> freq_vs_temp.txt
+	echo '$tval $&freq' >> freq_vs_temp.txt
 end
 
 echo 'Done'
 shell cat freq_vs_vdd.txt freq_vs_temp.txt
-e.dnc
+.endc
 "}
