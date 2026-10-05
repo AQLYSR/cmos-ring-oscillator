@@ -51,6 +51,17 @@ C {lab_pin.sym} 1510 0 0 0 {name=p11 sig_type=std_logic lab=n5}
 C {vdd.sym} 690 -140 0 0 {name=l1 lab=VDD}
 C {gnd.sym} 690 140 0 0 {name=l2 lab=0}
 C {vsource.sym} -260 0 0 0 {name=V1 value=1.8 savecurrent=false}
-C {code_shown.sym} 1400 220 0 0 {name=s1 only_toplevel=false value="
+C {code_shown.sym} 530 380 0 0 {name=s1 only_toplevel=false value="
 .lib /foss/pdks/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+.temp 27
+.ic v(n1)=0
+.control
+tran 1p 10n
+plot v(n1) v(n3)
+meas tran t10 trig v(n1) val=0.9 rise=5 targ v(n1) val=0.9 rise=15
+let period = t10/ 10
+let freq = 1 / period
+print period freq
+hardcopy ring.ps v(n1)
+.endc
 "}
